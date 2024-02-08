@@ -71,6 +71,19 @@ namespace Eventhub_Utilities_Console {
 			return messages;
 		}
 
+
+		/// <summary>
+		///   Corresponds to a specific date and time for all partitions to begin seeking an event; 
+		///   the event enqueued on or after the specified <paramref name="time" /> will be read.
+		/// </summary>
+		public async Task<List<EventData>> ReadAllMessagesFromEventHubParitionOffset(DateTime offset) {
+			List<EventData> messages = new();
+			foreach (var id in await consumer.GetPartitionIdsAsync()) {
+				messages.AddRange(await ReadAllMessageFromPartitionDateOffset(id, offset));
+			}
+			return messages;
+		}
+
 		/// <summary>
 		///   Corresponds to the location of the first event present in the partition.  Use this
 		///   position to begin receiving from the first event that was enqueued in the partition
